@@ -23,6 +23,7 @@ function NewDebt() {
   }
 
   const handleSubmit = () => {
+    console.log(user.token)
     if (isReady){
     dispatch(newDebt({token: user.token, debt: inputValue}))
     setInputValue({

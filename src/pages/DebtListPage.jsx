@@ -14,6 +14,7 @@ function DebtListPage() {
     dispatch(getDebt(user.token))
   }
   useEffect(() => {
+    console.log(user)
     if(user){
    handleReload()      
     }

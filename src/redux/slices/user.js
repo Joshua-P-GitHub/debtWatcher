@@ -23,6 +23,7 @@ export const register = createAsyncThunk('user/new', async (data, thunkAPI) => {
       }))
       return({
         userName: response.data.userName,
+        token: response.data.token,
       })
     }
   } catch (error) {
