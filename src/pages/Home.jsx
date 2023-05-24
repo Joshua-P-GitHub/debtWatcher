@@ -13,12 +13,12 @@ function Home() {
    dispatch(autoLogin())
   }, [])
   return (
-    <div>
+    <div id='home'>
       <header>
-        <h1>Keep Track of your Debt</h1>
+        <h1 style={{color: 'white'}}>Debt Tracker</h1>
       </header>
       <main>
-        <h3 onClick={() => {navigate('/login')}}>Begin Tracking</h3>
+        <h3 onClick={() => {navigate('/login')}} style={{cursor: 'pointer'}}>Begin Tracking</h3>
       </main>
     </div>
   )

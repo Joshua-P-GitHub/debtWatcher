@@ -36,7 +36,7 @@ const deleteDebt = async (req,res) => {
 
 const updateDebt = async (req,res) => {
   try {
-   const completeDebt = await Debt.findByIdAndUpdate(req.body._id, {isCompleted: true})
+   const updatedDebt = await Debt.findByIdAndUpdate(req.params.id, req.body)
    const userDebts = await Debt.find({user: req.user._id})
    res.status(200).json(userDebts)
   } catch (error) {

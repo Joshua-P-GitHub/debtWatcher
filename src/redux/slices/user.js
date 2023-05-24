@@ -43,6 +43,7 @@ export const login = createAsyncThunk('user/login', async (data, thunkAPI) => {
       }))
       return({
         userName: response.data.userName,
+        token: response.data.token
       })
     }
   } catch (error) {

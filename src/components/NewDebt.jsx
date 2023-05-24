@@ -17,15 +17,20 @@ function NewDebt() {
     inputValueCopy[`${event.target.name}`] = event.target.value
     setInputValue(inputValueCopy);
   };
-
+  let isReady;
+  if (inputValue.title.trim() !== '' && inputValue.originalAmount !== '' && inputValue.amountPutInDebt.trim() !== '' && inputValue.title !== '/delete'){
+   isReady = true
+  }
 
   const handleSubmit = () => {
+    if (isReady){
     dispatch(newDebt({token: user.token, debt: inputValue}))
     setInputValue({
       title: '',
       originalAmount: '',
       amountPutInDebt: '',
-    })
+    })      
+    }
   }
   return (
     <div id='new-debt'>
@@ -42,14 +47,14 @@ function NewDebt() {
         onChange={handleInputChange}/>
       </div>
       <div id='debt-title-toggles'>
-        <p>0% completed</p>
+        <p></p>
       </div>
     </div>
     <div id='debt-retract'>
-    <h3>RETRACT</h3>
+    <h3></h3>
     </div>
-    <div id='debt-add' onClick={handleSubmit}>
-    <h3>ADD</h3>
+    <div id='debt-add' onClick={handleSubmit} style={isReady ? {backgroundColor: 'green'} : {backgroundColor: 'black'}}>
+    <h3>Create</h3>
     </div>
       <div id='debt-put-in-amnt'>
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}> 

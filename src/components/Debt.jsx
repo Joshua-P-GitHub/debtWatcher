@@ -1,7 +1,7 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteDebt, getDebt } from '../redux/slices/debt';
+import { deleteDebt, getDebt, updateDebt } from '../redux/slices/debt';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -22,6 +22,8 @@ function Debt(props) {
     originalAmount: props.originalAmount,
     amountPutInDebt: props.amountPutInDebt,
   }
+  console.log(trueInputValue)
+
   let isSame;
   if (inputValue.title === trueInputValue.title && inputValue.originalAmount.toLocaleString() === trueInputValue.originalAmount.toLocaleString() && inputValue.amountPutInDebt.toLocaleString() === trueInputValue.amountPutInDebt.toLocaleString()){
    isSame = true 
@@ -40,7 +42,10 @@ function Debt(props) {
       console.log(user.token)
       dispatch(deleteDebt({token: user.token, debt: props._id}))
       dispatch(getDebt(user.token))
-    } else if (isSame){
+    } else if (!isSame && inputValue.title !== '' && inputValue.originalAmount !== '' && inputValue.amountPutInDebt !== ''){
+        dispatch(updateDebt({token: user.token, data: {debt: props._id, updateDept: {...inputValue}}}))
+    }
+     else if (isSame && inputValue.title !== '' && inputValue.originalAmount !== '' && inputValue.amountPutInDebt !== ''){
       setAddAmntToggle(true)
       inputRef.current.focus()
     }
@@ -51,20 +56,30 @@ function Debt(props) {
   }
 
   const handleAddBlur = () => {
-    console.log(Number(addAmount) + Number(trueInputValue.amountPutInDebt))
+    if (addAmount !== ''){
+      console.log('edjfsbsfekjdb')
+    let newAmount = Number(addAmount) + Number(trueInputValue.amountPutInDebt)
+    dispatch(updateDebt({token: user.token, data: {debt: props._id, updateDebt: {amountPutInDebt: newAmount}}}))
+    setAddAmntToggle(false)
+    props.handleReload()
+    setInputValue({...inputValue, amountPutInDebt: newAmount})
+    setAddAmount('')
+    } else {
+    setAddAmntToggle(false)
+    }
   }
 
-  const handleBlur = () => {
+
+  const handleRetract = () => {
 
   }
-
+  let percentage =  (Number(trueInputValue.amountPutInDebt) / Number(trueInputValue.originalAmount)) * 100
   const inputRef = useRef()
   return (
     <div id='debt'>
       <div id='debt-date'>
         <div>
-          <p>04-24</p>
-          <p>2020</p>
+            <p>{props.num}</p>
         </div>
       </div>
       <div id='debt-title-div'>
@@ -72,26 +87,26 @@ function Debt(props) {
           <input type="text" name="title" id="" placeholder='Enter Title' value={inputValue.title} onChange={handleInputChange}/>
         </div>
         <div id='debt-title-toggles'>
-          <p>50% completed</p>
+          <p>{percentage}% completed</p>
         </div>
       </div>
       <div id='debt-retract'>
       <h3>RETRACT</h3>
       </div>
-      <div id='debt-add' onClick={handleSubmit}>
+      <div id='debt-add' onClick={handleSubmit} style={inputValue.title === '/delete' ? {backgroundColor: 'red'} : isSame ? {backgroundColor: 'green'} : inputValue.title === '' || inputValue.originalAmount === '' || inputValue.amountPutInDebt === '' ? {backgroundColor: 'black'} : {backgroundColor: 'yellow'}}>
       <h3>{isSame ? 'ADD' : inputValue.title === '/delete' ? 'DELETE' : 'Update'}</h3>
       </div>
         <div id='debt-put-in-amnt'>
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}> 
           <p>$</p>
-          <input type="number" name="amountPutInDebt" id="" placeholder='AMNT' value={ !addAmntToggle ? inputValue.amountPutInDebt : addAmount } onChange={!addAmntToggle ? handleInputChange : handleAddAmnt} ref={inputRef} onBlur={addAmntToggle ? handleAddBlur : handleBlur}/>            
+          <input type="number" name="amountPutInDebt" id="" placeholder='AMNT' value={ !addAmntToggle ? inputValue.amountPutInDebt : addAmount } onChange={!addAmntToggle ? handleInputChange : handleAddAmnt} ref={inputRef} onBlur={addAmntToggle ? handleAddBlur : null}/>            
           </div>
           <p>into debt</p>
         </div>
         <div id='debt-origin-amnt'>
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}> 
           <p>$</p>
-          <input type="number" name="originalAmount" id="" placeholder='AMNT' value={inputValue.originalAmount} onChange={handleInputChange}/>            
+          <input type="number" name="originalAmount" id="" placeholder='AMNT' value={inputValue.originalAmount} onChange={handleInputChange} />            
           </div>
           <p>originally owed</p>
         </div>
@@ -99,7 +114,7 @@ function Debt(props) {
         <div id='progress-bar-white' style={{flex: 1, backgroundColor: 'white', padding: '0px'}}>
 
         </div>
-        <div id='progress-bar-green' style={{backgroundColor: 'green', height: '20%'}}>
+        <div id='progress-bar-green' style={{backgroundColor: 'green', height: `${percentage}%`}}>
 
         </div>
       </div>
