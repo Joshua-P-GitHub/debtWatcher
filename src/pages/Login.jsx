@@ -11,19 +11,24 @@ function Login() {
     password: '',
     confirmPassword: '',
   });
+  //Check if Login fields have content
   let isLoginReady;
   if (inputValue.email !== '' && inputValue.password !== '' && inputValue.email.includes('@')){
     isLoginReady = true
   }
+  //Check if Register fields have content
   let isRegeisterReady;
   if (inputValue.email !== '' && inputValue.password !== '' && inputValue.password !== '' && inputValue.confirmPassword === inputValue.password && inputValue.name !== '' && inputValue.email.includes('@')){
     isRegeisterReady = true
   }
+  //keep track of user Input
   const handleInputChange = (event) => {
     const inputValueCopy = { ...inputValue }
     inputValueCopy[`${event.target.name}`] = event.target.value
     setInputValue(inputValueCopy);
   };
+
+  //Function To Login User
   const handleLogin = () => {
     if (isLoginReady){
     dispatch(login({
@@ -33,6 +38,8 @@ function Login() {
     navigate('/')      
     }
   }
+
+  //Function To Register User
   const handleRegister = () => {
     if (isRegeisterReady){
       dispatch(register({

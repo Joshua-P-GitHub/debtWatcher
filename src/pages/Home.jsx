@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 function Home() {
   const dispatch = useDispatch()
   let navigate = useNavigate()
+  //Auto Login
   useEffect(() => {
    dispatch(autoLogin())
   }, [])
