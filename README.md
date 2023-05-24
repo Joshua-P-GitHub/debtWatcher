@@ -18,6 +18,8 @@ Trello board:
 https://trello.com/invite/b/lzxeM4dM/ATTI31e72b8e3d5cf2e160a867365a3bcefd706DAFBA/mydebt-project
 Deployed App:
 https://debtwatcher.onrender.com
+ERD:
+https://lucid.app/lucidchart/260225e7-a8a0-4d15-b9ed-15c15f249608/edit?invitationId=inv_bc17ff31-8f04-4e1a-9948-984ce3a4dfb8
 
 
 Unsolved Problems:
