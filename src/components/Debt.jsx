@@ -8,8 +8,12 @@ import { useNavigate } from 'react-router-dom';
 
 
 function Debt(props) {
+  //REDUX
   const {user} = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
+
   const navigate = useNavigate()
+  //STATE
   const [addAmount, setAddAmount] = useState('')
   const [addAmntToggle, setAddAmntToggle] = useState(false)
   const [inputValue, setInputValue] = useState({
@@ -17,26 +21,28 @@ function Debt(props) {
     originalAmount: props.originalAmount,
     amountPutInDebt: props.amountPutInDebt,
   })
+  //Keep track of the database info
   const trueInputValue = {
     title: props.title,
     originalAmount: props.originalAmount,
     amountPutInDebt: props.amountPutInDebt,
   }
   console.log(trueInputValue)
-
+  console.log(inputValue)
+  //Checks if user updated anything
   let isSame;
   if (inputValue.title === trueInputValue.title && inputValue.originalAmount.toLocaleString() === trueInputValue.originalAmount.toLocaleString() && inputValue.amountPutInDebt.toLocaleString() === trueInputValue.amountPutInDebt.toLocaleString()){
    isSame = true 
   } else {
     isSame = false
   }
-  console.log(isSame)
+  //Keep track of user input
   const handleInputChange = (event) => {
     const inputValueCopy = { ...inputValue }
     inputValueCopy[`${event.target.name}`] = event.target.value
     setInputValue(inputValueCopy);
   };
-  const dispatch = useDispatch()
+  //Submits user Data to server
   const handleSubmit = () => {
     if (inputValue.title === '/delete'){
       console.log(user.token)
@@ -50,16 +56,15 @@ function Debt(props) {
       inputRef.current.focus()
     }
   }
-
+  //Keep track of user Add amount input
   const handleAddAmnt = (event) => {
     setAddAmount(event.target.value)
   }
 
+  //update amountPut in 
   const handleAddBlur = () => {
     if (addAmount !== ''){
-      console.log('edjfsbsfekjdb')
     let newAmount = Number(addAmount) + Number(trueInputValue.amountPutInDebt)
-    dispatch(updateDebt({token: user.token, data: {debt: props._id, updateDebt: {amountPutInDebt: newAmount}}}))
     setAddAmntToggle(false)
     props.handleReload()
     setInputValue({...inputValue, amountPutInDebt: newAmount})
@@ -101,7 +106,7 @@ function Debt(props) {
           <p>$</p>
           <input type="number" name="amountPutInDebt" id="" placeholder='AMNT' value={ !addAmntToggle ? inputValue.amountPutInDebt : addAmount } onChange={!addAmntToggle ? handleInputChange : handleAddAmnt} ref={inputRef} onBlur={addAmntToggle ? handleAddBlur : null}/>            
           </div>
-          <p>into debt</p>
+          <p>Paid Off</p>
         </div>
         <div id='debt-origin-amnt'>
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}> 

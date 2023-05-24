@@ -65,7 +65,7 @@ function NewDebt() {
         onChange={handleInputChange}
         />            
         </div>
-        <p>into debt</p>
+        <p>Paid off</p>
       </div>
       <div id='debt-origin-amnt'>
       <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}> 

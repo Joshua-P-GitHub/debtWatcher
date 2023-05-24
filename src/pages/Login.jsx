@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { register, login } from '../redux/slices/user';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 function Login() {
   const dispatch = useDispatch()
@@ -11,27 +11,43 @@ function Login() {
     password: '',
     confirmPassword: '',
   });
+  let isLoginReady;
+  if (inputValue.email !== '' && inputValue.password !== '' && inputValue.email.includes('@')){
+    isLoginReady = true
+  }
+  let isRegeisterReady;
+  if (inputValue.email !== '' && inputValue.password !== '' && inputValue.password !== '' && inputValue.confirmPassword === inputValue.password && inputValue.name !== '' && inputValue.email.includes('@')){
+    isRegeisterReady = true
+  }
   const handleInputChange = (event) => {
     const inputValueCopy = { ...inputValue }
     inputValueCopy[`${event.target.name}`] = event.target.value
     setInputValue(inputValueCopy);
   };
   const handleLogin = () => {
+    if (isLoginReady){
     dispatch(login({
       email: inputValue.email,
       password: inputValue.password,
     }))
-    navigate('/')
+    navigate('/')      
+    }
   }
   const handleRegister = () => {
-    dispatch(register({
-      name: inputValue.name,
-      email: inputValue.email,
-      password: inputValue.password
-    }))
-    navigate('/')
+    if (isRegeisterReady){
+      dispatch(register({
+        name: inputValue.name,
+        email: inputValue.email,
+        password: inputValue.password
+      }))
+      navigate('/')
+    }
   }
   return (
+    <>
+      <header>
+        <h1 style={{color: 'white', cursor: 'pointer'}} onClick={() => {navigate('/')}}>Debt Tracker</h1>
+      </header>
     <div id='login-form'>
       <div className='form'>
       <div className='item'>
@@ -46,7 +62,7 @@ function Login() {
       <div className='item'>
         <h3>EMAIL</h3>
         <input
-          type="text"
+          type="email"
           value={inputValue.email}
           onChange={handleInputChange}
           name='email'
@@ -56,7 +72,7 @@ function Login() {
       <div className='item'>
         <h3>PASSWORD</h3>
         <input
-          type="text"
+          type="password"
           value={inputValue.password}
           onChange={handleInputChange}
           name='password'
@@ -66,18 +82,19 @@ function Login() {
       <div className='item'>
         <h3>Confirm Password</h3>
         <input
-          type="text"
+          type="password"
           value={inputValue.confirmPassword}
           onChange={handleInputChange}
           name='confirmPassword'
         />
       </div>
       <div className='buttons'>
-      <h2 onClick={handleRegister}>Register</h2>
-      <h2 onClick={handleLogin}>Login</h2>           
+      <h2 onClick={handleRegister} style={ !isRegeisterReady ? {opacity: .1} : {opacity: 1}}>Register</h2>
+      <h2 onClick={handleLogin} style={ !isLoginReady ? {opacity: .1} : {opacity: 1}}>Login</h2>           
       </div>
       </div>
     </div>
+    </>
   )
 }
 
